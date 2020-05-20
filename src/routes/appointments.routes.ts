@@ -1,30 +1,27 @@
 import { Router } from 'express';
-import { startOfHour, parseISO, isEqual } from 'date-fns';
-import Appointment from '../models/Appointment.model';
+import { startOfHour, parseISO } from 'date-fns';
+import AppointmentsRepository from '../repositories/Appointments.repository';
 
 const appointmentsRouter = Router();
 
-const appointments: Appointment[] = [];
+const appointmentsRepository = new AppointmentsRepository();
 
 appointmentsRouter.post('/', (request, response) => {
   const { provider, date } = request.body;
 
   const parsedDate = startOfHour(parseISO(date));
-  const dateAlreadyExists = appointments.find(appointment =>
-    isEqual(parsedDate, appointment.date),
-  );
+
+  const dateAlreadyExists = appointmentsRepository.findByDate(parsedDate);
 
   if (dateAlreadyExists) {
     return response.status(400).json({
-      message: 'This appointment is already taken, please select another date',
+      message: 'This appointment is already taken, pelase choose another date.',
     });
   }
 
-  const apointment = new Appointment(provider, parsedDate);
+  const appointment = appointmentsRepository.create(provider, parsedDate);
 
-  appointments.push(apointment);
-
-  return response.json(apointment);
+  return response.json(appointment);
 });
 
 export default appointmentsRouter;
