@@ -1,10 +1,8 @@
 import { uuid } from 'uuidv4';
 
-class Appointment {
+export class Appointment {
   id: string;
-
   provider: string;
-
   date: Date;
 
   constructor(provider: string, date: Date) {
@@ -13,5 +11,3 @@ class Appointment {
     this.date = date;
   }
 }
-
-export default Appointment;
