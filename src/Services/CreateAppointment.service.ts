@@ -11,14 +11,14 @@ interface RequestDTO {
 export class CreateAppointmentService {
   public async execute({ provider, date }: RequestDTO): Promise<Appointment> {
     if (!date) {
-      throw Error('Data not found');
+      throw Error('Date not found');
     } else {
       const appointmentsRepository = getCustomRepository(
         AppointmentsRepository,
       );
       const parsedDate = parseISO(date);
       const appointmentDate = startOfHour(parsedDate);
-      const dateAlreadyExists = appointmentsRepository.findByDate(
+      const dateAlreadyExists = await appointmentsRepository.findByDate(
         appointmentDate,
       );
 
