@@ -1,13 +1,13 @@
 import { Router } from 'express';
 import { AppointmentsRepository } from '../repositories/Appointments.repository';
 import { CreateAppointmentService } from '../services/CreateAppointment.service';
+import { getCustomRepository } from 'typeorm';
 
 const appointmentsRouter = Router();
 
-const appointmentsRepository = new AppointmentsRepository();
-
 appointmentsRouter.get('/', (request, response) => {
-  const appointments = appointmentsRepository.all();
+  const appointmentsRepository = getCustomRepository(AppointmentsRepository);
+  const appointments = appointmentsRepository.find();
 
   return response.json(appointments);
 });
@@ -15,9 +15,7 @@ appointmentsRouter.get('/', (request, response) => {
 appointmentsRouter.post('/', (request, response) => {
   try {
     const { provider, date } = request.body;
-    const createAppointmentService = new CreateAppointmentService(
-      appointmentsRepository,
-    );
+    const createAppointmentService = new CreateAppointmentService();
     const appointment = createAppointmentService.execute({
       provider,
       date,
