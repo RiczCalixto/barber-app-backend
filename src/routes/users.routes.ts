@@ -2,8 +2,12 @@ import { Router } from 'express';
 import { CreateUserService } from '../services/CreateUser.service';
 import { getRepository } from 'typeorm';
 import { User } from '../models/User.model';
+import { checkAuthentication } from '../middlewares/checkAuthentication';
+import multer from 'multer';
+import uploadConfig from '../config/upload';
 
 export const usersRouter = Router();
+const upload = multer(uploadConfig);
 
 usersRouter.post('/', async (request, response) => {
   try {
@@ -31,3 +35,12 @@ usersRouter.get('/', async (request, response) => {
   return response.json(usersWithoutPassword);
 });
 
+usersRouter.patch(
+  '/avatar',
+  checkAuthentication,
+  upload.single('avatar'),
+  async (request, response) => {
+    console.log('Avatar info', request.file);
+    return response.json({ ok: true });
+  },
+);
