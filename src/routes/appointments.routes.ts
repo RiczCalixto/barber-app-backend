@@ -2,8 +2,11 @@ import { Router } from 'express';
 import { AppointmentsRepository } from '../repositories/Appointments.repository';
 import { CreateAppointmentService } from '../services/CreateAppointment.service';
 import { getCustomRepository } from 'typeorm';
+import { checkAuthentication } from '../middlewares/checkAuthentication';
 
 export const appointmentsRouter = Router();
+
+appointmentsRouter.use(checkAuthentication);
 
 appointmentsRouter.get('/', async (request, response) => {
   const appointmentsRepository = getCustomRepository(AppointmentsRepository);
