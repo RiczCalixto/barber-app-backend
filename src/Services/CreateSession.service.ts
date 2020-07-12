@@ -2,7 +2,7 @@ import { getRepository } from 'typeorm';
 import { User } from '../models/User.model';
 import { compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
-import { authConfig } from '../confi/auth';
+import authConfig from '../config/auth';
 
 interface AuthenticationDTO {
   email: string;
