@@ -3,7 +3,7 @@ import { CreateUserService } from '../services/CreateUser.service';
 import { getRepository } from 'typeorm';
 import { User } from '../models/User.model';
 
-const usersRouter = Router();
+export const usersRouter = Router();
 
 usersRouter.post('/', async (request, response) => {
   try {
@@ -31,4 +31,3 @@ usersRouter.get('/', async (request, response) => {
   return response.json(usersWithoutPassword);
 });
 
-export default usersRouter;

@@ -3,7 +3,7 @@ import { AppointmentsRepository } from '../repositories/Appointments.repository'
 import { CreateAppointmentService } from '../services/CreateAppointment.service';
 import { getCustomRepository } from 'typeorm';
 
-const appointmentsRouter = Router();
+export const appointmentsRouter = Router();
 
 appointmentsRouter.get('/', async (request, response) => {
   const appointmentsRepository = getCustomRepository(AppointmentsRepository);
@@ -20,6 +20,7 @@ appointmentsRouter.post('/', async (request, response) => {
       provider_id,
       date,
     });
+
     return response.json(appointment);
   } catch (error) {
     return response.status(400).json({ error: error.message });
