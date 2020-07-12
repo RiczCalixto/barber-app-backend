@@ -3,13 +3,16 @@ import { startOfHour, parseISO } from 'date-fns';
 import { AppointmentsRepository } from '../repositories/Appointments.repository';
 import { getCustomRepository } from 'typeorm';
 
-interface RequestDTO {
+interface AppointmentDTO {
   date: string;
-  provider: string;
+  provider_id: string;
 }
 
 export class CreateAppointmentService {
-  public async execute({ provider, date }: RequestDTO): Promise<Appointment> {
+  public async execute({
+    provider_id,
+    date,
+  }: AppointmentDTO): Promise<Appointment> {
     if (!date) {
       throw Error('Date not found');
     } else {
@@ -29,7 +32,7 @@ export class CreateAppointmentService {
       }
 
       const appointment = appointmentsRepository.create({
-        provider,
+        provider_id,
         date: appointmentDate,
       });
 
