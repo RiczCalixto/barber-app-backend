@@ -3,6 +3,7 @@ import { getRepository } from 'typeorm';
 import path from 'path';
 import fs from 'fs';
 import uploadConfig from '../config/upload';
+import { RouteError } from '../errors/RouteError';
 
 interface AvatarDTO {
   user_id: string;
@@ -14,7 +15,8 @@ export class UpdateUserAvatarService {
     const usersRepository = getRepository(User);
     const user = await usersRepository.findOne(user_id);
 
-    if (!user) throw new Error('Only authenticated users can change avatar.');
+    if (!user)
+      throw new RouteError('Only authenticated users can change avatar.', 401);
 
     if (user.avatar) this.deleteExistentAvatar(user.avatar);
 

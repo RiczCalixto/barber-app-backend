@@ -2,6 +2,7 @@ import { Appointment } from '../models/Appointment.model';
 import { startOfHour, parseISO } from 'date-fns';
 import { AppointmentsRepository } from '../repositories/Appointments.repository';
 import { getCustomRepository } from 'typeorm';
+import { RouteError } from '../errors/RouteError';
 
 interface AppointmentDTO {
   date: string;
@@ -14,7 +15,7 @@ export class CreateAppointmentService {
     date,
   }: AppointmentDTO): Promise<Appointment> {
     if (!date) {
-      throw Error('Date not found');
+      throw new RouteError('Date not found');
     } else {
       const appointmentsRepository = getCustomRepository(
         AppointmentsRepository,
@@ -26,7 +27,7 @@ export class CreateAppointmentService {
       );
 
       if (dateAlreadyExists) {
-        throw Error(
+        throw new RouteError(
           'This appointment is already taken, pelase choose another date.',
         );
       }

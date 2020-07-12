@@ -3,6 +3,7 @@ import { User } from '../models/User.model';
 import { compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 import authConfig from '../config/auth';
+import { RouteError } from '../errors/RouteError';
 
 interface AuthenticationDTO {
   email: string;
@@ -28,7 +29,7 @@ export class CreateSessionService {
     const isSamePassword = await compare(password, user.password);
     const isWrongPassword = !isSamePassword;
 
-    if (isWrongPassword) throw new Error('Wrong email or password');
+    if (isWrongPassword) throw new RouteError('Wrong email or password', 401);
 
     const { tokenSecret, expiresIn } = authConfig.jwt;
 

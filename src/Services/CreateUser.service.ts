@@ -1,6 +1,7 @@
 import { User } from '../models/User.model';
 import { getRepository } from 'typeorm';
 import { hash } from 'bcryptjs';
+import { RouteError } from '../errors/RouteError';
 
 interface UserDTO {
   name: string;
@@ -15,7 +16,7 @@ export class CreateUserService {
       where: { email },
     });
 
-    if (hasEmailAlready) throw new Error('Email address already exists.');
+    if (hasEmailAlready) throw new RouteError('Email address already exists.');
 
     const hashedPassword = await hash(password, 8);
 

@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction, request, response } from 'express';
 import { verify } from 'jsonwebtoken';
 import authConfig from '../config/auth';
+import { RouteError } from '../errors/RouteError';
 
 interface TokenPayload {
   iat: number;
@@ -15,7 +16,7 @@ export const checkAuthentication = (
 ): void => {
   const { authorization } = req.headers;
 
-  if (!authorization) throw new Error('JWT is missing');
+  if (!authorization) throw new RouteError('JWT is missing', 401);
 
   const [, token] = authorization.split(' ');
 
@@ -30,6 +31,6 @@ export const checkAuthentication = (
 
     return next();
   } catch {
-    throw new Error('Invalid JWT');
+    throw new RouteError('Invalid JWT', 401);
   }
 };
